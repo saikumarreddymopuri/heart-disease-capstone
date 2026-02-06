@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/* Setting up the theme colors and fonts for v4 */
+@theme {
+  --color-neon-blue: #00f2ff;
+  --color-neon-red: #ff004c;
+  --font-inter: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: #020617;
+    color: #f1f5f9; /* replacement for slate-100 */
+    font-family: var(--font-inter);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  /* The Secret Sauce for Glassmorphism */
+  .glass-card {
+    background-color: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    border-radius: 1rem;
+  }
+
+  .glass-input {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s;
+  }
+
+  .glass-input:focus {
+    outline: none;
+    border-color: rgba(34, 211, 238, 0.5);
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+    border-color: rgba(34, 211, 238, 0.5);
+  }
+}
+
+/* Heart Pumping Glow Animation */
+@keyframes heart-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(239, 68, 68, 0.4)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.8)); }
+}
+
+.animate-heart {
+  animation: heart-pulse 2s infinite ease-in-out;
+}

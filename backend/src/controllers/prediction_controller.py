@@ -1,14 +1,25 @@
-def predict_heart_risk(text_input):
-    """
-    For now, simulate a prediction based on text input.
-    Later, connect this to preprocess + model + explainability.
-    """
-    # Simple rule-based mockup
-    keywords = ["chest pain", "high bp", "tired", "short breath"]
-    risk_score = 0.75 if any(k in text_input.lower() for k in keywords) else 0.25
+from flask import request, jsonify
+import joblib
+from utils.preprocessing import preprocess_input
 
-    return {
-        "input": text_input,
-        "predicted_risk": risk_score,
-        "explanation": "Mock explanation - real XGBoost model will be integrated soon."
-    }
+# Load model once
+xgb_model = joblib.load("models/xgboost_heart_pipeline_v2.pkl")
+
+def predict_heart_disease():
+    try:
+        data = request.get_json()
+
+        X = preprocess_input(data)   # Pandas DataFrame (correct)
+
+        # Predict probability
+        prob_disease = xgb_model.predict_proba(X)[0][1]
+        prediction = int(prob_disease >= 0.5)
+
+        return jsonify({
+            "prediction": prediction,
+            "risk_probability": round(float(prob_disease), 4),
+            "message": "High risk" if prediction == 1 else "Low risk"
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
